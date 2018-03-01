@@ -1,8 +1,6 @@
 #!/usr/bin/python3
 from collections import namedtuple
 from operator import attrgetter
-import matplotlib.pyplot as plt
-import networkx as nx
 
 def mostraDati(R,C,F,N,B,T,corse):
     print("R: %d C: %d F: %d N: %d B: %d T: %d" % (R,C,F,N,B,T))
@@ -13,17 +11,15 @@ def mostraDati(R,C,F,N,B,T,corse):
 #Calcola la distanza tra due nodi ed un grafo dato
 #Start: Tupla (x,y)
 #End: Tupla (x,y)
-#Esempio: getDistance(town,(0,0),(4,2))
-def getDistance(graph,start,end):
-    return len(nx.dijkstra_path(graph,start,end)) - 1
+#Esempio: getDistance((0,0),(4,2))
+def getDistance(start,end):
+    return abs(start[1]-end[1])+abs(start[0]-end[0])
 
 corsa = namedtuple('corsa','a b x y s f init')
 corse = []
 town = None #Qui ci va il grafo della città
 
 R,C,F,N,B,T = map(int,input().strip().split())
-
-town = nx.grid_2d_graph(R,C)
 
 for n in range(N):
     a,b,x,y,s,f = map(int,input().strip().split())
@@ -34,4 +30,3 @@ for n in range(N):
 corse = sorted(corse, key=attrgetter('s'))
 
 #mostraDati(R,C,F,N,B,T,corse)
-#nx.draw(town)
