@@ -1,5 +1,7 @@
 #!/usr/bin/python3
 from collections import namedtuple
+from operator import attrgetter
+import networkx as nx
 
 def mostraDati(R,C,F,N,B,T,corse):
     print("R: %d C: %d F: %d N: %d B: %d T: %d" % (R,C,F,N,B,T))
@@ -18,4 +20,6 @@ for n in range(N):
     tmpC = corsa(a,b,x,y,s,f,n)
     corse.append(tmpC)
 
+
+sorted(corse, key=attrgetter('init'))
 mostraDati(R,C,F,N,B,T,corse)
