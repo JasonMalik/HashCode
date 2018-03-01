@@ -1,9 +1,6 @@
-#auto dizionario
-#corse, init
 #!/usr/bin/python3
 from collections import namedtuple
 from operator import attrgetter
-
 
 def getDistance(start,end):
     return abs(start[1]-end[1])+abs(start[0]-end[0])
@@ -46,8 +43,14 @@ corse=sorted(corse, key=attrgetter('s'))
 while (getted):
     getted=False
     for val,macchina in auto.items():
+        moved = False
+        totalX = 0
+        totalY = 0
+        count = 0
         for run in corse:
-
+            totalX=totalX+run.a
+            totalY=totalY+run.b
+            count=count+1
             distanza=getDistance((macchina[0],macchina[1]),(run.a,run.b))
             distanzaStartFinish=getDistance((run.a,run.b),(run.x,run.y))
             if(not(scritti[run.init]) and run.s>=macchina[4]+distanza and ((macchina[3]-distanza-distanzaStartFinish)>0) and  (macchina[4]+distanza+distanzaStartFinish)<run.f ):
@@ -56,32 +59,44 @@ while (getted):
                 macchina[1]=run.y
                 macchina[3] = macchina[3] - distanza - distanzaStartFinish
                 getted=True
+                moved=True
                 if(run.s>(macchina[4]+distanza)):
                     macchina[4]=run.s + distanzaStartFinish
                 else:
                     macchina[4]=macchina[4] + distanza + distanzaStartFinish
                 scritti[run.init]=True
+                break
                 #corse = sorted(corse, key=attrgetter('init'))
                 #corse.remove(run.init)
                 #corse = sorted(corse, key=attrgetter('s'))
 
-            elif(not(scritti[run.init]) and ((macchina[3]-distanza-distanzaStartFinish)>0) and  (macchina[4]+distanza+distanzaStartFinish)<run.f ):
+            elif(not(scritti[run.init]) and ((macchina[3]-distanza-distanzaStartFinish)>0) and (macchina[4]+distanza+distanzaStartFinish)<run.f ):
+                #runTmp.append([run.init, distanza, distanzaStartFinish])
                 macchina[2].append(run.init)
                 macchina[0] = run.x
                 macchina[1] = run.y
                 macchina[3] = macchina[3] - distanza - distanzaStartFinish
                 getted = True
+                moved = True
                 if (run.s > (macchina[4] + distanza)):
                     macchina[4] = run.s + distanzaStartFinish
                 else:
                     macchina[4] = macchina[4] + distanza + distanzaStartFinish
                 scritti[run.init]=True
+                break
+    if(not moved):
+        finito = (int(totalX/count),int(totalY/count))
+        macchina[0] = int(totalX/count)
+        macchina[1] = int(totalY/count)
+        macchina[3] = macchina[3] - getDistance((macchina[0],macchina[1]),finito)
+        macchina[4] = macchina[4] + getDistance((macchina[0],macchina[1]),finito)
+
+
                # corse = sorted(corse, key=attrgetter('init'))
               #  corse.remove(run.init)
               #  corse = sorted(corse, key=attrgetter('s'))
 
 
 for val,m in auto.items():
-    print(val,m[2])
-
-
+    runs = ''.join(str(e)+ ' ' for e in m[2])
+    print(len(m[2]),runs.strip())
